@@ -10,14 +10,14 @@ const crypto = require("crypto");
 require("dotenv").config();
 
 const register = async (req, res, next) => {
-  const { name, email, password } = req.body;
+  const { userName, email, password } = req.body;
 
   try {
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(password, salt);
     const verificationToken = crypto.randomBytes(40).toString("hex");
     const user = await User.create({
-      name,
+      userName,
       email,
       password: hashPassword,
       verificationToken: verificationToken,
@@ -26,7 +26,7 @@ const register = async (req, res, next) => {
     console.log(verificationToken);
     const origin = "http://localhost:3000";
     await sendVerificationEmail({
-      name: user.name,
+      name: user.userName,
       email: user.email,
       verificationToken: verificationToken,
       origin,
@@ -101,7 +101,7 @@ const forgotPassword = async (req, res, next) => {
     const passwordToken = crypto.randomBytes(70).toString("hex");
     const origin = "http://localhost:3000";
     await sendResetPasswordEmail({
-      name: user.name,
+      name: user.userName,
       email: user.email,
       token: passwordToken,
       origin,
@@ -140,6 +140,21 @@ const resetPassword = async (req, res, next) => {
   }
   res.send("reset password");
 };
+const updateUser = async (req, res, next) => {
+  const userId = req.user.id;
+  const { userName, email } = req.body;
+
+  const user = await User.findOneAndUpdate(
+    { _id: userId },
+    { userName, email },
+    { new: true, runValidators: true }
+  );
+
+  if (!user) {
+    return res.status(401).json({ msg: "Incorrect user id" });
+  }
+  res.status(201).json({ msg: "Updated Successfully" });
+};
 
 module.exports = {
   register,
@@ -147,4 +162,5 @@ module.exports = {
   login,
   forgotPassword,
   resetPassword,
+  updateUser,
 };

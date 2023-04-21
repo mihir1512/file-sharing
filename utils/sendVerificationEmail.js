@@ -9,7 +9,7 @@ const sendVerificationEmail = async ({
 }) => {
   const resetUrl = `${origin}/user/verify-email?token=${verificationToken}&email=${email}`;
   console.log(verificationToken);
-  const message = `<p> Please reset password by clicking on the following link: 
+  const message = `<p> Please verify email by clicking on the following link: 
     <a href="${resetUrl}">Reset Password</a></p>`;
 
   return sendEmail({

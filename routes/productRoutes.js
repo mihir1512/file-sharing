@@ -16,6 +16,10 @@ router
   .post(authenticateUser, createProduct)
   .get(authenticateUser, getAllProducts);
 
-router.route("/:id").get();
+router
+  .route("/:id")
+  .get(getSingleProduct)
+  .patch(authenticateUser, updateProduct)
+  .delete(authenticateUser, deleteProduct);
 
 module.exports = router;

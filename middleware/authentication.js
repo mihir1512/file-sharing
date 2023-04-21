@@ -11,7 +11,7 @@ const userAuthenticate = async (req, res, next) => {
     // console.log(req.user);
     next();
   } else {
-    res.status(201).json({ msg: "Wrong email or password" });
+    res.status(201).json({ msg: "Invalid email or password" });
   }
 };
 
