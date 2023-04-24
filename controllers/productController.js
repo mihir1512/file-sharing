@@ -6,13 +6,16 @@ const createProduct = async (req, res, next) => {
   const file = req.file;
   const productName = req.body.name;
   const path = file.path;
+  const permission = req.body.permission;
 
   try {
     const product = await Product.create({
       name: productName,
       path: path,
       user: req.user.id,
+      permission: permission,
     });
+
     res.status(201).json({ product });
   } catch (error) {
     console.log(error);
@@ -21,7 +24,14 @@ const createProduct = async (req, res, next) => {
 
 const getAllProducts = async (req, res, next) => {
   try {
-    const products = await Product.find();
+    const products = await Product.find({
+      $or: [
+        { permission: "public" },
+        { sharedWith: { $elemMatch: { userId: req.user.id } } },
+        { user: req.user.id },
+      ],
+    });
+    console.log(products);
     res.status(200).json(products);
   } catch (error) {
     console.log(error);

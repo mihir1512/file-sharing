@@ -12,11 +12,22 @@ const ProductSchema = new Schema(
       type: String,
       required: [true, "Please provide path"],
     },
+    permission: {
+      type: String,
+      enum: ["public", "private"],
+      default: "public",
+    },
     user: {
       type: mongoose.Types.ObjectId,
       ref: "User",
       required: true,
     },
+    sharedWith: [
+      {
+        userId: { type: mongoose.Types.ObjectId, ref: "User" },
+        time: { type: Date, default: Date.now },
+      },
+    ],
   },
   {
     timestamps: true,

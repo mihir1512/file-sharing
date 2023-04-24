@@ -25,7 +25,7 @@ const register = async (req, res, next) => {
 
     console.log(verificationToken);
     const origin = "http://localhost:3000";
-    await sendVerificationEmail({
+    sendVerificationEmail({
       name: user.userName,
       email: user.email,
       verificationToken: verificationToken,

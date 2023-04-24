@@ -38,13 +38,6 @@ const UserSchema = new Schema(
     passwordTokenExpirationDate: {
       type: Date,
     },
-    receivedFile: [
-      {
-        userId: { type: mongoose.Types.ObjectId, ref: "User" },
-        product: { type: mongoose.Types.ObjectId, ref: "Product" },
-        time: Date,
-      },
-    ],
   },
   {
     timestamps: true,

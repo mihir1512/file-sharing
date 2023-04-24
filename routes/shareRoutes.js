@@ -6,6 +6,7 @@ const {
   shareFile,
   getAllFiles,
   getSingleFile,
+  deleteFile,
 } = require("../controllers/shareController");
 
 router
@@ -13,5 +14,8 @@ router
   .post(authenticateUser, shareFile)
   .get(authenticateUser, getAllFiles);
 
-router.route("/:id").get(authenticateUser, getSingleFile);
+router
+  .route("/:id")
+  .get(authenticateUser, getSingleFile)
+  .delete(authenticateUser, deleteFile);
 module.exports = router;
